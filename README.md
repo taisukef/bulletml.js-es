@@ -4,12 +4,6 @@
 
 JavaScript BulletML library ES module version forked from [bulletml.js](https://github.com/daishihmr/bulletml.js)
 
-## USAGE
-
-```js
-import { bulletml } from "https://taisukef.github.io/bulletml.js-es/bulletml.js";
-```
-
 ## DEMO
 
 [独自実装](http://taisukef.github.io/bulletml.js-es/)
@@ -18,7 +12,9 @@ import { bulletml } from "https://taisukef.github.io/bulletml.js-es/bulletml.js"
 
 ### Runner
 
-```
+```js
+import { bulletml } from "https://taisukef.github.io/bulletml.js-es/bulletml.js";
+
 // setup
 const bml = bulletml.buildXML("<bulletml>...</bulletml>");
 const runner = bml.createRunner({
@@ -64,6 +60,8 @@ enemy.update = () => {
 ```
 
 ```
+import { bulletml } from "https://taisukef.github.io/bulletml.js-es/bulletml.js";
+
 const d = bulletml.dsl;
 const spec = new bulletml.Root({
     top: d.action([
