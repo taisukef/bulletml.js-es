@@ -1,4 +1,4 @@
-(function() {
+import { bulletml } from "./bulletml.js";
 
 /** @namespace */
 bulletml.json = bulletml.json || {};
@@ -56,7 +56,3 @@ var sample = {
     fires: [
     ],
 };
-
-
-
-})();

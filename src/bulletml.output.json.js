@@ -1,4 +1,4 @@
-(function() {
+import { bulletml } from "./bulletml.js";
 
 /** @namespace */
 bulletml.output = bulletml.output || {};
@@ -195,5 +195,3 @@ bulletml.Autonomy.prototype.toJSON = function() {
     };
 };
 
-
-})();

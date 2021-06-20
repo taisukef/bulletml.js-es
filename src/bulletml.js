@@ -806,3 +806,5 @@ if (typeof module === 'object') {
     }
 
 })();
+
+export { bulletml };

@@ -1,4 +1,4 @@
-(function() {
+import { bulletml } from "./bulletml.js";
 
 /** @namespace */
 bulletml.runner = bulletml.runner || {};
@@ -468,5 +468,3 @@ var normalizeRadian = function(radian) {
 var angleAtoB = function(a, b) {
     return Math.atan2(b.y-a.y, b.x-a.x);
 };
-
-})();

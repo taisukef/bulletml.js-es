@@ -4,10 +4,11 @@
 <meta charset=UTF-8>
 </head>
 <body style="margin:0">
-<script src="../build/bulletml.min.js"></script>
-<script>
+<script type="module">
+import { bulletml } from "./bulletml.js";
+
 // 弾幕パターンをBulletMLで記述
-var danmaku0 = bulletml.buildXML(
+const danmaku0 = bulletml.buildXML(
     "<bulletml>" +
         "<action label='top'>" +
             "<repeat>" +
@@ -91,38 +92,39 @@ var danmaku0 = bulletml.buildXML(
         "</action>" +
     "</bulletml>"
 );
+//console.log(danmaku0);
 
 // 弾幕パターンをBulletML DSLで記述
-bulletml.dsl();
-var danmaku1 = new bulletml.Root({
-    top: action([
-        repeat(999, [
-            repeat(30, [
-                fire(direction(12, "sequence"), speed(5), bullet(actionRef("b"))),
-                repeat(9-1, [
-                    fire(direction(360/9, "sequence"), speed(5), bullet(actionRef("b"))),
+const d = bulletml.dsl;
+const danmaku1 = new bulletml.Root({
+    top: d.action([
+        d.repeat(999, [
+            d.repeat(30, [
+                d.fire(d.direction(12, "sequence"), d.speed(5), d.bullet(d.actionRef("b"))),
+                d.repeat(9-1, [
+                    d.fire(d.direction(360/9, "sequence"), d.speed(5), d.bullet(d.actionRef("b"))),
                 ]),
-                wait(2),
+                d.wait(2),
             ]),
-            wait(30),
-            repeat(30, [
-                fire(direction(-12, "sequence"), speed(5), bullet(actionRef("b"), {color:"hsl(220, 60%, 80%)"})),
-                repeat(9-1, [
-                    fire(direction(360/9, "sequence"), speed(5), bullet(actionRef("b"), {color:"hsl(220, 60%, 80%)"})),
+            d.wait(30),
+            d.repeat(30, [
+                d.fire(d.direction(-12, "sequence"), d.speed(5), d.bullet(d.actionRef("b"), {color:"hsl(220, 60%, 80%)"})),
+                d.repeat(9-1, [
+                    d.fire(d.direction(360/9, "sequence"), d.speed(5), d.bullet(d.actionRef("b"), {color:"hsl(220, 60%, 80%)"})),
                 ]),
-                wait(2),
+                d.wait(2),
             ]),
-            wait(30),
+            d.wait(30),
         ]),
     ]),
-    b: action([
-        changeSpeed(speed(1), 30),
-        wait(30),
-        changeDirection(direction(0, "aim"), 60),
-        changeSpeed(speed(3), 30),
-        wait(50),
-        vanish(),
-        fire(speed(2), bullet({color:"hsl(50, 60%, 80%)"}))
+    b: d.action([
+        d.changeSpeed(d.speed(1), 30),
+        d.wait(30),
+        d.changeDirection(d.direction(0, "aim"), 60),
+        d.changeSpeed(d.speed(3), 30),
+        d.wait(50),
+        d.vanish(),
+        d.fire(d.speed(2), d.bullet({color:"hsl(50, 60%, 80%)"}))
     ]),
 });
 
@@ -216,6 +218,7 @@ window.onload = function() {
     // 敵(DSL版)
     var enemyDSL = new Hex(40, 30, 15, "hsl(250, 60%, 80%)").addTo(scene);
     // DSL版でもXML版と使い方は同じ
+    
     enemyDSL.danmakuRunner = danmaku1.createRunner(danmakuConfig);
     enemyDSL.update = function(frame) {
         this.x = SC_W*.5 + Math.cos(frame*0.01) * SC_W*.4
@@ -225,8 +228,6 @@ window.onload = function() {
         this.danmakuRunner.y = this.y;
         this.danmakuRunner.update();
     };
-
-
 
     scene.start();
 };
@@ -259,7 +260,7 @@ var Scene = function() {
     document.body.appendChild(canvas);
     canvas.width = SC_W;
     canvas.height = SC_H;
-    canvas.fitWindow();
+    fitWindow(canvas);
 
     this.context = canvas.getContext("2d");
     this.context.textAlign = "right";
@@ -314,7 +315,7 @@ var Hex = function(w, h, radius, color) {
     context.fillStyle = this.color;
     context.translate(w, h);
     context.globalAlpha = 1.0;
-    context.fillHex(w, h);
+    fillHex(context, w, h);
 
     this.parent = null;
 };
@@ -397,28 +398,28 @@ Array.prototype.erase = function(obj) {
     var idx = this.indexOf(obj);
     if (idx !== -1) this.splice(idx, 1);
 };
-CanvasRenderingContext2D.prototype.fillHex = function(w, h) {
-    this.beginPath();
-    this.moveTo(Math.sin(Math.PI/3 * 0)*w*.5, Math.cos(Math.PI/3 * 0)*h*.5);
+const fillHex = (ctx, w, h) => {
+    ctx.beginPath();
+    ctx.moveTo(Math.sin(Math.PI/3 * 0)*w*.5, Math.cos(Math.PI/3 * 0)*h*.5);
     for (var i = 1; i < 6; i++) {
-        this.lineTo(Math.sin(Math.PI/3 * i)*w*.5, Math.cos(Math.PI/3 * i)*h*.5);
+        ctx.lineTo(Math.sin(Math.PI/3 * i)*w*.5, Math.cos(Math.PI/3 * i)*h*.5);
     }
-    this.closePath();
-    this.fill();
+    ctx.closePath();
+    ctx.fill();
 };
-HTMLCanvasElement.prototype.fitWindow = function() {
-    var resize = function() {
-        var rateWidth = this.width/window.innerWidth;
-        var rateHeight= this.height/window.innerHeight;
-        var rate = this.height/this.width;
+const fitWindow = (comp) => {
+    var resize = (() => {
+        var rateWidth = comp.width/window.innerWidth;
+        var rateHeight= comp.height/window.innerHeight;
+        var rate = comp.height/comp.width;
         if (rateWidth > rateHeight) {
-            this.style.width  = innerWidth+"px";
-            this.style.height = innerWidth*rate+"px";
+            comp.style.width  = innerWidth+"px";
+            comp.style.height = innerWidth*rate+"px";
         } else {
-            this.style.width  = innerHeight/rate+"px";
-            this.style.height = innerHeight+"px";
+            comp.style.width  = innerHeight/rate+"px";
+            comp.style.height = innerHeight+"px";
         }
-    }.bind(this);
+    }).bind(comp);
     window.addEventListener("resize", resize, false);
     resize();
 };
