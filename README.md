@@ -19,7 +19,7 @@ import { bulletml } from "https://taisukef.github.io/bulletml.js-es/bulletml.js"
 const bml = bulletml.buildXML("<bulletml>...</bulletml>");
 const runner = bml.createRunner({
   target: playerShip, // enemy's attack target (has 'x' and 'y' property)
-  createNewBullet: function(bulletRunner) { // function to be called when new bullet has been fired
+  createNewBullet: (bulletRunner) => { // function to be called when new bullet has been fired
     const bullet = new Bullet();
     bullet.update = () => {
       bulletRunner.update();
