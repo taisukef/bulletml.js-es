@@ -40,7 +40,7 @@ enemy.update = () => {
 
 ### DSL
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE bulletml SYSTEM "http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/bulletml.dtd">
 <bulletml xmlns="http://www.asahi-net.or.jp/~cs8k-cyu/bulletml">
@@ -59,7 +59,7 @@ enemy.update = () => {
 </bulletml>
 ```
 
-```
+```js
 import { bulletml } from "https://taisukef.github.io/bulletml.js-es/bulletml.js";
 
 const d = bulletml.dsl;
